@@ -35,7 +35,7 @@ namespace BookStoreApp.Services
                     PublishDate = bookDTO.PublishDate,
                     UserId = bookDTO.UserId,
                     Price= bookDTO.Price,
-                    Image= "http://localhost:5103/Images/"+bookDTO.Image
+                    Image= "http://localhost:5103/Images/"+bookDTO.Image.FileName
                 };
                 var result = _booksRepository.Add(books);
                 if (result != null)
@@ -50,11 +50,28 @@ namespace BookStoreApp.Services
             }
         }
 
-        public List<Books> GetBooks(string search)
+        public List<Books> GetBooks(string search,string genre)
         {
             try
             {
-                var books = _booksRepository.GetAll().Where(c => c.Title.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+                var books=_booksRepository.GetAll().ToList();
+                if (search == "All" && genre=="All")
+                {
+                    books = _booksRepository.GetAll().ToList();
+                }
+                else if (search == "All" && genre != "All")
+                {
+                    books = _booksRepository.GetAll().Where(c=>c.Genre.Equals(genre)).ToList();
+                }
+                else if (search != "All" && genre == "All")
+                {
+                    books = _booksRepository.GetAll().Where(c => c.Title.Contains(search, StringComparison.OrdinalIgnoreCase) || c.Author.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+                else
+                {
+                    books = _booksRepository.GetAll().Where(c => c.Title.Contains(search, StringComparison.OrdinalIgnoreCase) || c.Author.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+                    books = books.Where(c => c.Genre.Equals(genre)).ToList();
+                }
                 if (books != null)
                 {
                     return books;
@@ -83,7 +100,22 @@ namespace BookStoreApp.Services
             }
             return null;
         }
-
+        public Books GetById(int id)
+        {
+            try
+            {
+                var books = _booksRepository.GetById(id);
+                if (books != null)
+                {
+                    return books;
+                }
+            }
+            catch (Exception)
+            {
+                throw new NoBooksAvailableException();
+            }
+            return null;
+        }
         public bool RemoveBook(int id)
         {
             var result = _booksRepository.Delete(id);
@@ -94,19 +126,19 @@ namespace BookStoreApp.Services
             return false;
         }
 
-        public BookDTO UpdateBook(int id, BookDTO bookDTO)
+        public Books UpdateBook(int id, Books books)
         {
             var book = _booksRepository.GetById(id);
 
             if (book != null)
             {
-                book.Title = bookDTO.Title;
-                book.Author = bookDTO.Author;
-                book.Genre = bookDTO.Genre;
-                book.Price = bookDTO.Price;
-                book.PublishDate = bookDTO.PublishDate;
+                book.Title = books.Title;
+                book.Author = books.Author;
+                book.Genre = books.Genre;
+                book.Price = books.Price;
+                book.PublishDate = books.PublishDate;
                 var result = _booksRepository.Update(book);
-                return bookDTO;
+                return books;
             }
             return null;
         }

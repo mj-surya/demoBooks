@@ -5,10 +5,10 @@ namespace BookStoreApp.Interface
 {
     public interface IBookService
     {
-        List<Books> GetBooks(string search);
+        List<Books> GetBooks(string search,string genre);
         BookDTO AddBook(BookDTO bookDTO);
-        BookDTO UpdateBook(int id, BookDTO bookDTO);
-
+        Books UpdateBook(int id, Books books);
+        Books GetById(int id);
         List<Books> GetByUserId(string id);
         bool RemoveBook(int id);
     }

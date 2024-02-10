@@ -9,7 +9,7 @@ namespace BookStoreApp.Models
         public int BookID{ get; set; } = 0;
         public string UserId { get; set; } = "";
         [ForeignKey("UserId")]
-        public User user { get; set; }
+        public User? user { get; set; }
         public string Title { get; set; } = "";
         public string Author { get; set; } = "";
         public string Genre { get; set; } = "";

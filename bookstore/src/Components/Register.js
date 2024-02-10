@@ -1,9 +1,10 @@
 import { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import './Register.css';
+import { toast } from "react-toastify";
 
 function Register(){
-    const roles =["User","Admin"];
     const [username,setUsername] = useState("");
     const [password,setPassword] = useState("");
     const [repassword,setrePassword] = useState("");
@@ -11,22 +12,21 @@ function Register(){
     const [name,setName] = useState("");
     const [address,setAddress] = useState("");
     const [phone,setPhone] = useState("");
-    const navigate =useNavigate();
-    
+    const navigate = useNavigate();
 
     const admin=()=>{
-        setRole("Admin");
-    }
-    const user=()=>{
-        setRole("User");
-    }
+      setRole("Admin");
+  }
+  const user=()=>{
+      setRole("User");
+  }
+    
     const signUp = (event)=>{
         event.preventDefault();
         axios.post("http://localhost:5103/api/User/register",{
             email: username,
             role:	role,
             password:password,
-            address : address,
             phone : phone,
             name : name,
             reTypePassword : repassword
@@ -37,59 +37,58 @@ function Register(){
             await localStorage.setItem("role",userData.data.role);
             await localStorage.setItem("id",userData.data.email);
             await localStorage.setItem("name",userData.data.name);
-            alert("Registeration Successfull...");
-             navigate("/Home");
+            toast.success("Registeration Successfull...");
+            console.log(userData.data);
+            navigate("/Home");
             window.location.reload();
         })
         .catch((err)=>{
             alert(err.response.data);
+            toast.error("Could not register");
+            console.log(username)
+            console.log(phone)
+            console.log(name)
+            console.log(role)
+            console.log(err.response.data);
         })
     }
         return (
-            <div class="wrapper crollspy-example" data-bs-spy="scroll">
-                <div class="logo">
-                    <img src="./Logo.png" alt=""/>
-                </div>
-                <div class="text-center mt-4 name">
-                    Stay Quest
-                </div>
-                <form class="p-3 mt-3" onSubmit={signUp}>
-                    <div class="form-field d-flex align-items-center">
-                        <span class="far fa-user"></span>
-                        <input type="text"  required value={name} placeholder="Name" onChange={(e)=>{setName(e.target.value)}}/>
-                    </div>
-                    <div class="form-field d-flex align-items-center">
-                        <span class="far fa-user"></span>
-                        <input type="email"  required value={username} placeholder="Email" onChange={(e)=>{setUsername(e.target.value)}}/>
-                    </div>
-                    <div class="form-field d-flex align-items-center">
-                        <span class="fas fa-key"></span>
-                        <input type="password"  required placeholder="Password" value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
-                    </div>
-                    <div class="form-field d-flex align-items-center">
-                        <span class="far fa-user"></span>
-                        <input type="password"  required value={repassword} placeholder="Re-Type Password" onChange={(e)=>{setrePassword(e.target.value)}}/>
-                    </div>
-                    <div class="form-field d-flex align-items-center">
-                        <span class="far fa-user"></span>
-                        <input type="tel"  required value={phone} placeholder="Phone" onChange={(e)=>{setPhone(e.target.value)}}/>
-                    </div>
-                    <div class="form-field d-flex align-items-center">
-                        <span class="far fa-user"></span>
-                        <textarea type="text"  required value={address} placeholder="Address" onChange={(e)=>{setAddress(e.target.value)}}/>
-                    </div>
-                    
-                    <button type="submit" class="btn mt-3" >{role==='User' ? "Register as User": "Register as Hotel Manager"}</button>
-                </form>
-                
-                <div class="text-center fs-6">
-                    {role==='User' ? <Link  onClick ={admin}>Register as Hotel Manager</Link> : <Link  onClick ={user}>Register as User</Link>}
+          <div class="addbook">
+            <form onSubmit={signUp}>
+              <div class="form">
+                  <div class="title">Welcome</div>
+                  <div class="subtitle">Let's create your account!</div>
+                  <div class="input-container ic1">
+                    <input id="name" class="input" required type="text" placeholder="Name" value={name} onChange={(e)=>{setName(e.target.value)}} />
+                  </div>
+                  <div class="input-container ic2">
+                    <input id="email" class="input" required type="email" placeholder="Email" value={username} onChange={(e)=>{setUsername(e.target.value)}} />
+                  </div>
+                  <div class="input-container ic2">
+                    <input id="phone" class="input" required type="phone" placeholder="Phone" value={phone} onChange={(e)=>{setPhone(e.target.value)}}/>
+                  </div>
+                  <div class="input-container ic2">
+                    <input id="address" class="input" required type="text" placeholder="City" value={address} onChange={(e)=>{setAddress(e.target.value)}}/>
+                  </div>
+                  <div class="input-container ic2">
+                    <input id="password" class="input" required type="password" placeholder="Password" value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
+                  </div>
+                  <div class="input-container ic2">
+                    <input id="repassword" class="input" required type="password" placeholder="Re-Password" value={repassword} onChange={(e)=>{setrePassword(e.target.value)}}/>
+                  </div>
+                  <button type="submit" class="submit">{role==='User' ? "Register as User": "Register as Store Owner"}</button>
+                  <div class="text-center fs-6">
+                    {role==='User' ? <Link to="/Register" class="choice" onClick ={admin}>Register as Store Owner</Link> : <Link class="choice" to="/Register" onClick ={user}>Register as User</Link>}
                  
                 </div>
-                <div class="text-center fs-6">
-                or <Link to="/Login">Login</Link>
+                <div class="text-center choice fs-6">
+                or <Link to="/Login" class="choice">Login</Link>
                 </div>
-            </div>
+              </div>
+            </form>
+            
+                
+          </div>
           );
 
 }

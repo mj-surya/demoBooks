@@ -75,8 +75,10 @@ namespace BookStoreApp
             });
 
             builder.Services.AddScoped<IRepository<string, User>, UserRepository>();
+            builder.Services.AddScoped<IRepository<int,Books>,BooksRepository>();
 
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IBookService, BooksService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
 
 

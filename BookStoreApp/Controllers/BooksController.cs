@@ -9,17 +9,18 @@ using Microsoft.Extensions.Hosting;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using BookStoreApp.Exceptions;
+using BookStoreApp.Models;
 
 namespace BookStoreApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("reactApp")]
-    public class HotelController : ControllerBase
+    public class BookController : ControllerBase
     {
         private readonly IBookService _booksService;
 
-        public HotelController(IBookService hotelService)
+        public BookController(IBookService hotelService)
         {
             _booksService = hotelService;
         }
@@ -61,12 +62,12 @@ namespace BookStoreApp.Controllers
             return BadRequest(message);
         }
         [HttpGet]
-        public ActionResult GetBooks(string search)
+        public ActionResult GetBooks(string search,string genre)
         {
             string message = string.Empty;
             try
             {
-                var result = _booksService.GetBooks(search);
+                var result = _booksService.GetBooks(search,genre);
                 return Ok(result);
 
             }
@@ -80,7 +81,27 @@ namespace BookStoreApp.Controllers
             }
             return BadRequest(message);
         }
-        [HttpDelete("RemoveHotel")]
+        [HttpGet("GetById")]
+        public ActionResult GetBookById(int id)
+        {
+            string message = string.Empty;
+            try
+            {
+                var result = _booksService.GetById(id);
+                return Ok(result);
+
+            }
+            catch (NoBooksAvailableException ex)
+            {
+                message = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                message = ex.Message;
+            }
+            return BadRequest(message);
+        }
+        [HttpDelete("RemoveBook")]
         [Authorize(Roles = "Admin")]
         public ActionResult RemoveBook(int id)
         {
@@ -101,15 +122,15 @@ namespace BookStoreApp.Controllers
             return BadRequest(message);
 
         }
-        [HttpPut("UpdateHotel")]
+        [HttpPut("UpdateBook")]
         [Authorize(Roles = "Admin")]
-        public ActionResult UpdateHotel(int id, BookDTO bookDTO)
+        public ActionResult UpdateBook(int id, Books books)
         {
             string message = string.Empty;
 
             try
             {
-                var result = _booksService.UpdateBook(id, bookDTO);
+                var result = _booksService.UpdateBook(id, books);
                 if (result != null)
                 {
                     return Ok(result);
@@ -123,7 +144,7 @@ namespace BookStoreApp.Controllers
             return BadRequest(message);
         }
 
-        [HttpGet("GetById")]
+        [HttpGet("GetByUserId")]
         public ActionResult GetById(string id)
         {
             string message = string.Empty;

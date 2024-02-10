@@ -1,13 +1,13 @@
-import { useState } from "react";
 import axios from "axios";
-import {toast, ToastContainer} from 'react-toastify';
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
 
 function Login(){
     const [username,setUsername] = useState("");
     const [password,setPassword] = useState("");
     const navigate = useNavigate();
+
 
     const login = (event)=>{
         event.preventDefault();
@@ -22,38 +22,35 @@ function Login(){
             await localStorage.setItem("id",myData.data.email);
             await localStorage.setItem("name",myData.data.name);
             toast.success("Login Successfull...");
-             navigate("/Home");
+            navigate("/Home");
             window.location.reload();
         })
         .catch((err)=>{
-            toast.error(err.response.data);
+            alert(err.response.data);
         })        
     }
-return(
-    <div class="wrapper">
-        <div class="logo">
-            <img src="./Logo.png" alt=""/>
-        </div>
-        <div class="text-center mt-4 name">
-            Stay Quest
-        </div>
-        <form class="p-3 mt-3" onSubmit={login}>
-            <div class="form-field d-flex align-items-center">
-                <span class="far fa-user"></span>
-                <input type="email" value={username} placeholder="Username" onChange={(e)=>{setUsername(e.target.value)}} required/>
-            </div>
-            <div class="form-field d-flex align-items-center">
-                <span class="fas fa-key"></span>
-                <input type="password" required placeholder="Password" value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
-            </div>
-            <button type="submit" class="btn mt-3" >Login</button>
-        </form>
-        <div class="text-center fs-6">
-         or <Link to="/Register">Sign up</Link>
-        </div>
-    </div>
-);
 
+
+    return(
+        <div class="addbook">
+            <form onSubmit={login}>
+              <div class="form">
+                  <div class="title">Welcome Back</div>
+                  <div class="subtitle">Login to your account</div>
+                  <div class="input-container ic2">
+                    <input id="email" class="input" required type="email" placeholder="Email" value={username} onChange={(e)=>{setUsername(e.target.value)}} />
+                  </div>
+                  <div class="input-container ic2">
+                    <input id="password" class="input" required type="password" placeholder="Password" value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
+                  </div>
+                  <button type="submit" class="submit">Login</button>
+                  <div class="text-center choice fs-6">
+         or <Link to="/Register" class="choice">Sign up</Link>
+        </div>
+              </div>
+            </form>
+            
+          </div>
+    );
 }
-
 export default Login;
