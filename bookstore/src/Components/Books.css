@@ -21,13 +21,16 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    max-width: 1200px; /* Adjust this value as needed */
+    max-width: 1200px;
   }
   
   .card {
-    flex: 0 0 calc(30% - 20px); /* Adjust the width and margin as needed */
+    flex: 0 0 calc(30% - 20px);
     margin-bottom: 20px;
   }
   .btnspc{
     margin-left: 5px;
+  }
+  .card-img-top{
+    height: 500px;
   }

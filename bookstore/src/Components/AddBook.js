@@ -1,6 +1,7 @@
 import { useState } from "react";
 import './AddBook.css';
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function AddBook(){
     const [title,setTitle]=useState("");
@@ -32,10 +33,10 @@ function AddBook(){
             }
         })
         .then(async (userData)=>{
-            alert("Book Added")
+            toast.success("Book Added");
         })
         .catch((err)=>{
-            alert(err.response.data);
+            toast.error(err.response.data);
         })
 
     }

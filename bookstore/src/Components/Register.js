@@ -32,18 +32,19 @@ function Register(){
             reTypePassword : repassword
         })
         .then (async (userData)=>{
+            toast.success("Registeration Successfull...");
             var token = await userData.data.token;
             await localStorage.setItem("token",token);
             await localStorage.setItem("role",userData.data.role);
             await localStorage.setItem("id",userData.data.email);
             await localStorage.setItem("name",userData.data.name);
-            toast.success("Registeration Successfull...");
             console.log(userData.data);
+            setTimeout(function(){
+              window.location.reload();
+            },5000);
             navigate("/Home");
-            window.location.reload();
         })
         .catch((err)=>{
-            alert(err.response.data);
             toast.error("Could not register");
             console.log(username)
             console.log(phone)

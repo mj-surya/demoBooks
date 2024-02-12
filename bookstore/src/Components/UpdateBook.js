@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import './AddBook.css';
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function UpdateBook({id}){
     const [title,setTitle]=useState("");
@@ -56,10 +57,10 @@ function UpdateBook({id}){
             }
         })
         .then(async (userData)=>{
-            alert("Book Updated");
+            toast.success("Book Updated");
         })
         .catch((err)=>{
-            alert(err.response.data);
+            toast.error(err.response.data);
             console.log(err);
         })
 

@@ -9,15 +9,15 @@ import Books from './Components/Books';
 import AdminBooks from './Components/AdminBooks';
 import Login from './Components/Login';
 import UserMenu from './Components/UserMenu';
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   var usertype = localStorage.getItem('role');
   return (
     <div className="App">
-      
-      <ToastContainer/>
       <BrowserRouter>
       {usertype==="Admin"?<Menu/> : <UserMenu/> }
+      <ToastContainer/>
       <div class="margin">
       <Routes>
         <Route path="Register" element={<Register/>} />

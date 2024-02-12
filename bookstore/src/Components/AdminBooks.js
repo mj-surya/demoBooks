@@ -3,15 +3,18 @@ import './Books.css';
 import axios from "axios";
 import UpdateBook from "./UpdateBook";
 import Popup from "reactjs-popup";
+import { toast } from "react-toastify";
 
 function AdminBooks(){
     const [books,setBooks]=useState([]);
+    const [bkid,setBkid]=useState(0);
     const[isPopupOpen,setPopupOpen]=useState(false);
     useEffect(()=>{
         getBooks();
     },[]);
 
-    const edit = () => {
+    const edit = (id) => {
+        setBkid(id);
         setPopupOpen(true);
     };
 
@@ -42,11 +45,11 @@ function AdminBooks(){
          },
        })
          .then((response) => {
-           alert("Book Deleted");
+           toast.success("Book Deleted");
            getBooks();
          })
          .catch(function (error) {
-           alert(error.response ? error.response.data : 'An error occurred');
+           toast.error(error.response ? error.response.data : 'An error occurred');
          }); 
         } 
    }
@@ -66,11 +69,11 @@ function AdminBooks(){
                           <p className="card-text">Genre: {book.genre}</p>
                           <p className="card-text">Publish Date: {book.author}</p>
                           <p className="card-text">Price: $.{book.price}</p>
-                          <button className="btn btn-primary" onClick={edit}>Edit</button>
+                          <button className="btn btn-primary" onClick={()=>edit(book.bookID)}>Edit</button>
                           <button className="btn btn-danger btnspc" onClick={() => deleteBook(book.bookID)}>Delete</button>
                         </div>
                         <Popup open={isPopupOpen} onClose={() => setPopupOpen(false)} overlayStyle={{ background: 'rgba(0, 0, 0, 0.6)' }}>
-            <UpdateBook id={book.bookID}/>
+            <UpdateBook id={bkid}/>
               </Popup>
                       </div>
                     ))}

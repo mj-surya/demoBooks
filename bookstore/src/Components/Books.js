@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import './Books.css';
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function Books(){
     const [books,setBooks]=useState([]);
@@ -12,6 +13,9 @@ function Books(){
     },[search,genre]);
 
     const getBooks=()=>{
+      if(search==""){
+        setSearch("All");
+      }
         axios.get('http://localhost:5103/api/Book',{
             params: {
               search : search,

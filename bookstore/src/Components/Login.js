@@ -15,18 +15,20 @@ function Login(){
             email: username,
             password:password
         }).then( async(myData)=>{
+          toast.success("Login Successfull...");
             var token = await myData.data.token;
             var role = await myData.data.role;
             await localStorage.setItem("token",token);
             await localStorage.setItem("role",role);
             await localStorage.setItem("id",myData.data.email);
             await localStorage.setItem("name",myData.data.name);
-            toast.success("Login Successfull...");
+            setTimeout(function(){
+              window.location.reload();
+            },5000);
             navigate("/Home");
-            window.location.reload();
         })
         .catch((err)=>{
-            alert(err.response.data);
+            toast.error(err.response.data);
         })        
     }
 

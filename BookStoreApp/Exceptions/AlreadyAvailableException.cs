@@ -8,7 +8,7 @@ namespace HotelBookingApplication.Exceptions
         string message;
         public AlreadyAvailableException()
         {
-            message = "An hotel already exists with this user";
+            message = "An book already exists with this name";
         }
         public override string Message => message;
 
